@@ -10,19 +10,15 @@ import {
   Button,
   Icon,
 } from 'native-base';
-const routes = [
-  'ScarletScreen',
-  'GrayScreen',
-  'TrackerDetailsStateandDistrictWise',
-];
+const routes = ['HomeScreen', 'DashBoards', 'StateWiseDetails'];
 export default class SideBar extends React.Component {
   navigate = screen => {
-    if (screen === 'ScarletScreen') {
-      Actions.ScarletScreen();
-    } else if (screen === 'GrayScreen') {
-      Actions.GrayScreen();
-    } else if (screen === 'TrackerDetailsStateandDistrictWise') {
-      Actions.TrackerDetailsStateandDistrictWise();
+    if (screen === 'HomeScreen') {
+      Actions.HomeScreen();
+    } else if (screen === 'DashBoards') {
+      Actions.DashBoards();
+    } else if (screen === 'StateWiseDetails') {
+      Actions.StateWiseDetails();
     }
   };
   render() {

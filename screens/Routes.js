@@ -1,12 +1,39 @@
 import React from 'react';
-import {Router, Scene} from 'react-native-router-flux';
-import GrayScreen from './GrayScreen';
-import ScarletScreen from './ScarletScreen';
+import {BackHandler, Alert} from 'react-native';
+import {Router, Scene, Actions} from 'react-native-router-flux';
+import DashBoards from './DashBoards';
+import HomeScreen from './HomeScreen';
 import SideBar from './SideBar';
-import TrackerDetailsStateandDistrictWise from '../screens/Tracker/TrackerDetailsStateandDistrictWise';
+import StateWiseDetails from '../screens/Tracker/StateWiseDetails';
 
 const Routes = () => (
-  <Router>
+  <Router
+    backAndroidHandler={() => {
+      if (Actions.currentScene === 'HomeScreen') {
+        Alert.alert(
+          'Exit',
+          'Do you want to Exit the App?',
+          [
+            {
+              text: 'No',
+              onDismiss: () => {
+                return true;
+              },
+              style: 'cancel',
+            },
+            {
+              text: 'Yes',
+              onPress: () => BackHandler.exitApp(),
+            },
+          ],
+          {cancelable: true},
+        );
+        return true;
+      } else {
+        Actions.pop();
+      }
+      return true;
+    }}>
     <Scene
       hideNavBar
       key="drawer"
@@ -16,12 +43,16 @@ const Routes = () => (
       drawerPosition="left"
       initial>
       <Scene key="root">
-        <Scene key="ScarletScreen" component={ScarletScreen} title="Scarlet" />
-        <Scene key="GrayScreen" component={GrayScreen} title="Gray" />
         <Scene
-          key="TrackerDetailsStateandDistrictWise"
-          component={TrackerDetailsStateandDistrictWise}
-          title="TrackerDetailsStateandDistrictWise"
+          key="HomeScreen"
+          component={HomeScreen}
+          title="India Covid-19 Tracker"
+        />
+        <Scene key="DashBoards" component={DashBoards} title="DashBoard" />
+        <Scene
+          key="StateWiseDetails"
+          component={StateWiseDetails}
+          title="India Covid-19 State Wise Details"
         />
       </Scene>
     </Scene>
