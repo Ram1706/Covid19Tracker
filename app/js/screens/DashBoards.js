@@ -3,9 +3,11 @@
 import React from 'react';
 import {StyleSheet, View, Dimensions} from 'react-native';
 import {LineChart} from 'react-native-chart-kit';
-import {getStateWiseDetails} from './Utils/trackerutils';
+import {getStateWiseDetails} from './utils/trackerutils';
 import {Form, Item, Picker, Icon} from 'native-base';
-import {STATES as states} from '../screens/Utils/constants';
+import {STATES as states} from '../screens/utils/constants';
+import AgeChart from '../screens/dashboards/AgeChart';
+import axios from 'axios';
 
 class DashBoards extends React.Component {
   constructor(props) {
@@ -18,17 +20,27 @@ class DashBoards extends React.Component {
   }
 
   componentDidMount() {
-    // Simple GET request using fetch
-    fetch('https://api.covid19india.org/states_daily.json')
-      .then(response => response.json())
-      .then(data => this.setState({data: data, loading: false}));
+    if (this.state.loading) {
+      this.getStates();
+    }
   }
+
+  getStates = async () => {
+    try {
+      const [rawDataResponse, stateDailyResponse] = await Promise.all([
+        axios.get('https://api.covid19india.org/raw_data.json'),
+        axios.get('https://api.covid19india.org/states_daily.json'),
+      ]);
+      this.setState({ageDetails: rawDataResponse.data.raw_data});
+      this.setState({data: stateDailyResponse.data, loading: false});
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   addStateselectOptions() {
     const stateItems = [];
-    console.log('stateItems' + JSON.stringify(stateItems));
     states.forEach(state => {
-      console.log('state' + state);
       stateItems.push(<Picker.Item label={state} value={state} />);
     });
     return stateItems;
@@ -66,7 +78,7 @@ class DashBoards extends React.Component {
           data={getStateWiseDetails(this.state.data.states_daily)}
           width={Dimensions.get('window').width} // from react-native
           height={220}
-          yAxisLabel={'P'}
+          yAxisLabel={'C'}
           fromZero={true}
           chartConfig={{
             backgroundColor: '#e26a00',
@@ -84,6 +96,7 @@ class DashBoards extends React.Component {
             borderRadius: 16,
           }}
         />
+        <AgeChart title="Patients by Age" data={this.state.ageDetails} />
       </View>
     ) : null;
   }

@@ -35,6 +35,7 @@ export const STATES = [
   'Ladakh',
   'Lakshadweep',
   'Puducherry',
+  'State Unassigned',
 ];
 
 export const STATE_CODES = {
@@ -74,4 +75,5 @@ export const STATE_CODES = {
   LA: 'Ladakh',
   LD: 'Lakshadweep',
   PY: 'Puducherry',
+  SU: 'State Unassigned',
 };

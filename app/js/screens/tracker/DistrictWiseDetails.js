@@ -24,6 +24,23 @@ class DistrictWiseDetails extends React.Component {
                 alignStyle={styles.alignCenter}
                 title="Confirmed"
                 content={stateDetail.confirmed}
+                dailyCount={stateDetail.delta.confirmed}
+              />
+            </Col>
+            <Col size={40}>
+              <SingleColItem
+                alignStyle={styles.alignCenter}
+                title="Recovered"
+                content={stateDetail.recovered}
+                dailyCount={stateDetail.delta.recovered}
+              />
+            </Col>
+            <Col size={40}>
+              <SingleColItem
+                alignStyle={styles.alignCenter}
+                title="Deceased"
+                content={stateDetail.deceased}
+                dailyCount={stateDetail.delta.deceased}
               />
             </Col>
             <Col size={30}>
@@ -93,6 +110,9 @@ const SingleColItem = props => {
         <Row>
           <Col style={alignStyle}>
             <Text style={styles.contentText}>{content}</Text>
+            {/* {dailyCount ? (
+              <Text style={styles.contentText}>{dailyCount}</Text>
+            ) : null} */}
           </Col>
         </Row>
       </Col>

@@ -4,7 +4,7 @@ import {Router, Scene, Actions} from 'react-native-router-flux';
 import DashBoards from './DashBoards';
 import HomeScreen from './HomeScreen';
 import SideBar from './SideBar';
-import StateWiseDetails from '../screens/Tracker/StateWiseDetails';
+import StateWiseDetails from '../screens/tracker/StateWiseDetails';
 
 const Routes = () => (
   <Router
