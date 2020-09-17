@@ -1,3 +1,4 @@
+/* eslint-disable react-native/no-inline-styles */
 import React from 'react';
 import {BackHandler, Alert} from 'react-native';
 import {Router, Scene, Actions} from 'react-native-router-flux';
@@ -47,12 +48,14 @@ const Routes = () => (
           key="HomeScreen"
           component={HomeScreen}
           title="India Covid-19 Tracker"
+          navigationBarStyle={{backgroundColor: '#85e085'}}
         />
         <Scene key="DashBoards" component={DashBoards} title="DashBoard" />
         <Scene
           key="StateWiseDetails"
           component={StateWiseDetails}
           title="India Covid-19 State Wise Details"
+          navigationBarStyle={{backgroundColor: '#85e085'}}
         />
       </Scene>
     </Scene>

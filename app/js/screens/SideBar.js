@@ -1,15 +1,8 @@
 /* eslint-disable react-native/no-inline-styles */
 import React from 'react';
 import {Actions} from 'react-native-router-flux';
-import {
-  Text,
-  Container,
-  List,
-  ListItem,
-  Content,
-  Button,
-  Icon,
-} from 'native-base';
+import {Text, Container, List, ListItem, Content, Button} from 'native-base';
+import Icon from 'react-native-vector-icons/FontAwesome';
 const routes = ['HomeScreen', 'DashBoards', 'StateWiseDetails'];
 export default class SideBar extends React.Component {
   navigate = screen => {
@@ -42,8 +35,10 @@ export default class SideBar extends React.Component {
             }}
           />
           <Button transparent>
+            <Text style={{color:'black'}}>Close</Text>
             <Icon
-              name="menu"
+              size={30}
+              name="times-circle"
               onPress={() => {
                 Actions.drawerClose();
               }}

@@ -1,5 +1,5 @@
 import React from 'react';
-import {StyleSheet, Text, View} from 'react-native';
+import {StyleSheet, Text} from 'react-native';
 import {Actions} from 'react-native-router-flux';
 import {Col, Row, Grid} from 'react-native-easy-grid';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -14,7 +14,7 @@ const HomeScreen = () => {
             <Icon name="chart-line" size={20} color="#900" />
           </Text>
         </Col>
-        <Col size={40}>
+        <Col size={30}>
           <Text
             style={styles.alignCenter}
             onPress={() => Actions.StateWiseDetails()}>
@@ -36,7 +36,7 @@ const HomeScreen = () => {
             <Icon name="chart-line" size={20} color="#900" />
           </Text>
         </Col>
-        <Col size={40}>
+        <Col size={30}>
           <Text
             style={styles.alignCenter}
             onPress={() => Actions.StateWiseDetails()}>
@@ -58,7 +58,7 @@ const HomeScreen = () => {
             <Icon name="chart-line" size={20} color="#900" />
           </Text>
         </Col>
-        <Col size={40}>
+        <Col size={30}>
           <Text
             style={styles.alignCenter}
             onPress={() => Actions.StateWiseDetails()}>
@@ -78,7 +78,7 @@ const HomeScreen = () => {
 };
 
 const styles = StyleSheet.create({
-  gridContainer:{
+  gridContainer: {
     backgroundColor: '#d9c58f',
   },
   container: {

@@ -1,10 +1,16 @@
 /* eslint-disable react/jsx-no-undef */
 /* eslint-disable react-native/no-inline-styles */
 import React from 'react';
+import {bindActionCreators} from 'redux';
+import {connect} from 'react-redux';
 import {StyleSheet, View, Dimensions} from 'react-native';
 import {LineChart} from 'react-native-chart-kit';
 import {getStateWiseDetails} from './utils/trackerutils';
-import {Form, Item, Picker, Icon} from 'native-base';
+import {
+  getAgeWiseDetails,
+  getStateWiseDailyDetails,
+} from './dashboards/services/action';
+import {Form, Item, Picker, Icon, Spinner} from 'native-base';
 import {STATES as states} from '../screens/utils/constants';
 import AgeChart from '../screens/dashboards/AgeChart';
 import axios from 'axios';
@@ -14,29 +20,14 @@ class DashBoards extends React.Component {
     super(props);
     this.state = {
       data: [],
-      loading: true,
       selectedState: '',
     };
   }
 
   componentDidMount() {
-    if (this.state.loading) {
-      this.getStates();
-    }
+    this.props.getAgeWiseDetails({});
+    this.props.getStateWiseDailyDetails({});
   }
-
-  getStates = async () => {
-    try {
-      const [rawDataResponse, stateDailyResponse] = await Promise.all([
-        axios.get('https://api.covid19india.org/raw_data.json'),
-        axios.get('https://api.covid19india.org/states_daily.json'),
-      ]);
-      this.setState({ageDetails: rawDataResponse.data.raw_data});
-      this.setState({data: stateDailyResponse.data, loading: false});
-    } catch (err) {
-      console.log(err);
-    }
-  };
 
   addStateselectOptions() {
     const stateItems = [];
@@ -52,9 +43,17 @@ class DashBoards extends React.Component {
     });
   }
 
+  displaySpinner() {
+    return <Spinner color="green" />;
+  }
+
   render() {
-    return this.state.data.states_daily ? (
+    console.log(this.props.ageDetailsloading+" -- "+this.props.stateDetailsloading);
+    return this.props.stateDetails.states_daily ? (
       <View style={styles.container}>
+        {this.props.stateDetails &&
+          this.props.ageDetailsloading &&
+          this.displaySpinner()}
         <Form>
           <Item picker>
             <Picker
@@ -74,35 +73,59 @@ class DashBoards extends React.Component {
             </Picker>
           </Item>
         </Form>
-        <LineChart
-          data={getStateWiseDetails(this.state.data.states_daily)}
-          width={Dimensions.get('window').width} // from react-native
-          height={220}
-          yAxisLabel={'C'}
-          fromZero={true}
-          chartConfig={{
-            backgroundColor: '#e26a00',
-            backgroundGradientFrom: '#fb8c00',
-            backgroundGradientTo: '#ffa726',
-            decimalPlaces: 2, // optional, defaults to 2dp
-            color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-            style: {
+        {!this.props.stateDetailsloading && !this.props.ageDetailsloading && (
+          <LineChart
+            data={getStateWiseDetails(this.props.stateDetails.states_daily)}
+            width={Dimensions.get('window').width} // from react-native
+            height={220}
+            yAxisLabel={'C'}
+            fromZero={true}
+            chartConfig={{
+              backgroundColor: '#e26a00',
+              backgroundGradientFrom: '#fb8c00',
+              backgroundGradientTo: '#ffa726',
+              decimalPlaces: 2, // optional, defaults to 2dp
+              color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+              style: {
+                borderRadius: 16,
+              },
+            }}
+            bezier
+            style={{
+              marginVertical: 8,
               borderRadius: 16,
-            },
-          }}
-          bezier
-          style={{
-            marginVertical: 8,
-            borderRadius: 16,
-          }}
-        />
-        <AgeChart title="Patients by Age" data={this.state.ageDetails} />
+            }}
+          />
+        )}
+        {!this.props.stateDetailsloading && !this.props.ageDetailsloading && (
+          <AgeChart title="Patients by Age" data={this.props.ageDetails} />
+        )}
       </View>
     ) : null;
   }
 }
 
-export default DashBoards;
+const mapStateToProps = store => ({
+  stateDetails: store.getStateWiseDailyDetails.data,
+  stateDetailsloading: store.getStateWiseDailyDetails.loading,
+  ageDetails: store.getAgeWiseDetails.data,
+  ageDetailsloading: store.getAgeWiseDetails.loading,
+});
+
+const mapDispatchToProps = dispatch => ({
+  ...bindActionCreators(
+    {
+      getStateWiseDailyDetails: getStateWiseDailyDetails,
+      getAgeWiseDetails: getAgeWiseDetails,
+    },
+    dispatch,
+  ),
+});
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(DashBoards);
 
 const styles = StyleSheet.create({
   container: {
